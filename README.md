@@ -1,12 +1,25 @@
-This repository contains a README file sample for Daytona Samples and the MIT License.
 
-It can be used as a template to create sample repositories that can be added into [Daytona](https://github.com/daytonaio/daytona).
 
-Once you finish your sample and it gets merged, you can open a PR in the Daytona repo and submit the sample into the [index file](https://github.com/daytonaio/daytona/blob/main/hack/samples/index.json).
+# Go CRUD APPLICATION (GO + REDIS)
 
-# Sample <LANGUAGE/FRAMEWORK>
+This project implements a CRUD (Create, Read, Update, Delete) microservice using Golang, Chi Router, and Redis as the database
 
-Sample description
+---
+
+## ✨Features
+
+- CRUD operations for managing resources.
+- Uses Redis as the database for storage.
+- Utilizes the Chi router for handling HTTP requests.
+
+---
+## API Endpoints
+
+- `GET /orders`: List all Orders
+- `GET /orders/{id}`: Get an Order by ID.
+- `POST /orders`: Create a new Order.
+- `PUT /orders/{id}`: Update an Order by ID.
+- `DELETE /orders/{id}`: Delete an Order by ID.
 
 ---
 
@@ -14,21 +27,151 @@ Sample description
 
 ### Open Using Daytona  
 
-1. **Install Daytona**: Follow the [Daytona installation guide](https://www.daytona.io/docs/installation/installation/).  
+1. **Install Daytona**: Follow the [Daytona installation guide](https://www.daytona.io/docs/installation/installation/).
+
 2. **Create the Workspace**:  
    ```bash  
-   daytona create <SAMPLE_REPO_URL> 
+   daytona create https://github.com/daytonaio/sample-go-crud-redis
    ```  
-
-... MORE STEPS IF NEEDED ...
-
-4. **Start the Application**:  
-   ```bash  
-   command to start the app
+3. **Run the Redis server**:
+4. ```bash
+   redis-server
    ```  
+5. **Run the application in  a new terminal**
+   ```bash
+   go run main.go
+   ```
+   The application will run on `PORT : 3000`
+---
+
+# Example Request 
+
+
+## POSTMAN type Requests
+
+
+### Create an order
+
+```bash
+POST http://localhost:3000/orders
+```
+Payload for the request:
+
+```json
+
+  {
+    "customer_id": "550e8400-e29b-41d4-a716-446655440000",
+    "line_items": [
+      {
+        "item_id": "123e4567-e89b-12d3-a456-426614174000",
+        "quantity": 2,
+        "price": 1000
+      },
+      {
+        "item_id": "123e4567-e89b-12d3-a456-426614174001",
+        "quantity": 1,
+        "price": 500
+      }
+    ]
+  }
+  
+```
+The reponse will be same with the status:`OK`
+
+### Get All Orders
+
+```bash
+GET http://localhost:3000/orders
+```
+
+The request will return with the reponse of: 
+```json
+{
+  "items": [
+    {
+      "order_id": 1.2470706902630818e+19,
+      "customer_id": "550e8400-e29b-41d4-a716-446655440000",
+      "line_items": [
+        {
+          "item_id": "123e4567-e89b-12d3-a456-426614174000",
+          "quantity": 2,
+          "price": 1000
+        },
+        {
+          "item_id": "123e4567-e89b-12d3-a456-426614174001",
+          "quantity": 1,
+          "price": 500
+        }
+      ],
+      "created_at": "2024-12-11T09:19:09.15246014Z",
+      "shipped_at": null,
+      "completed_at": null
+    }
+  ]
+}
+```
+
+
+### To update the status of the order
+
+```bash
+PUT http://localhost:3000/orders/{id}
+```
+#### Payload to be sent:
+```json
+{
+    "status":"shipped"
+}
+```
+
+#### Response of the update:
+```json
+{
+  "order_id": 1234,
+  "customer_id": "550e8400-e29b-41d4-a716-446655440000",
+  "line_items": [
+    {
+      "item_id": "123e4567-e89b-12d3-a456-426614174000",
+      "quantity": 2,
+      "price": 1000
+    },
+    {
+      "item_id": "123e4567-e89b-12d3-a456-426614174001",
+      "quantity": 1,
+      "price": 500
+    }
+  ],
+  "created_at": "2024-12-11T09:40:33.534526754Z",
+  "shipped_at": "2024-12-11T10:01:24.974032869Z",
+  "completed_at": null
+}
+```
+
+### To Delete an Order
+
+```bash
+DELETE http://localhost:3000/orders/{id}
+```
 
 ---
 
-## ✨ Features  
+## cURL Request
 
-List of sample features (e.g. realtime chat app, standardized development environment with devcontainers)
+### Create an order
+
+```bash 
+curl --header "Content-Type: application/json" \
+     --request POST \
+     --data @example.json \
+     localhost:3000/orders
+```
+
+### List Orders
+```bash
+curl localhost:3000/orders
+```
+
+---
+
+
+
